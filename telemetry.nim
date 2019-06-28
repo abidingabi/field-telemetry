@@ -29,9 +29,15 @@ proc `$`*(telemetry: Telemetry): string =
 proc `$`*(point: Point): string =
     result = "x: " & $point.x & ", y: " & $point.y 
 
-proc `set`*(telemetry: Telemetry, x: int, y: int, character: char): Telemetry =
+proc set*(telemetry: Telemetry, x: int, y: int, character: char): Telemetry =
     result = telemetry
     result[y][x] = character
+
+proc xSize(telemetry: Telemetry): int =
+    result = telemetry[0].len
+
+proc ySize(telemetry: Telemetry): int =
+    result = telemetry.len
 
 proc drawLineAbsolute*(telemetry: Telemetry, point1: Point, point2: Point, character: char): Telemetry = 
     let firstPoint = if (point1.x < point2.x): point1 else: point2
@@ -59,7 +65,28 @@ proc drawLineAbsolute*(telemetry: Telemetry, point1: Point, point2: Point, chara
 
         result = result.set(x, y, character)
 
+#takes percentages as inputs
+proc drawLineScaled*(telemetry: Telemetry, x1: float, y1: float, x2: float, y2: float, center: Point, zoom: float, character: char): Telemetry = 
+    let adjustedX1 = x1 * telemetry.xSize.float
+    let adjustedX2 = x2 * telemetry.xSize.float
+    let adjustedY1 = (1 - y1) * telemetry.xSize.float * 0.53
+    let adjustedY2 = (1 - y2) * telemetry.xSize.float * 0.53
+    
+    let centerX = (-center.x.float) * telemetry.xSize.float
+    let centerY = (-center.y.float*0.53) * telemetry.xSize.float
+        
+    var realX1 = (x1 - centerX) * zoom + telemetry.xSize / 2
+    var realX2 = (x2 - centerX) * zoom + telemetry.xSize / 2
+    var realY1 = ((y1-centerY) * zoom) + telemetry.xSize / 2
+    var realY2 = ((y2-centerY) * zoom) + telemetry.xSize / 2
+    
+    # rewrite this in nim then you finish this method drawLine((int) real_x1,(int) real_y1,(int) real_x2,(int) real_y2, r,g,b, myChar);
+    
+
+proc drawField(center: Point, zoom: float): Telemetry = createTelemetry(1, 1) # finish this idiot
+
 when isMainModule:
-    echo $(createTelemetry(12, 12).drawLineAbsolute(
-       Point(x: 7, y: 2), Point(x: 4, y: 7), '|'
-    ))
+    discard ""
+    #echo $(createTelemetry(12, 12).drawLineScaled(
+    #   Point(x: 7, y: 2), Point(x: 4, y: 7), '|'
+    #))
