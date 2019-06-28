@@ -33,7 +33,7 @@ proc `set`*(telemetry: Telemetry, x: int, y: int, character: char): Telemetry =
     result = telemetry
     result[y][x] = character
 
-proc drawLineAbsolute(telemetry: Telemetry, point1: Point, point2: Point, character: char): Telemetry = 
+proc drawLineAbsolute*(telemetry: Telemetry, point1: Point, point2: Point, character: char): Telemetry = 
     let firstPoint = if (point1.x < point2.x): point1 else: point2
     let secondPoint = if (point1.x > point2.x): point1 else: point2
     
